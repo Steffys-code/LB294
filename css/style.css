@@ -315,3 +315,172 @@ input:focus-visible {
         transform: none;
     }
 }
+
+/* Category form */
+#categories form {
+    display: grid;
+    grid-template-columns: max-content max-content 1fr;
+    gap: 1rem 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background-color: #fffafd;
+    border: 1px solid var(--color-border);
+    border-radius: 0.85rem;
+}
+
+#categories form h3 {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--color-primary-dark);
+    font-size: 1.1rem;
+}
+
+#categories label[for="category-name"] {
+    grid-column: 1 / -1;
+    margin-bottom: -0.65rem;
+}
+
+#category-name {
+    grid-column: 1 / -1;
+}
+
+/* Keep the checkbox separate from full-width text inputs. */
+#categories form label:not([for]) {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: fit-content;
+    min-height: 44px;
+    cursor: pointer;
+}
+
+#categories input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 1.25rem;
+    height: 1.25rem;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+#categories form button {
+    margin: 0;
+}
+
+/* Secondary action */
+#categories form button[type="button"] {
+    color: var(--color-primary-dark);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+}
+
+#categories form button[type="button"]:hover {
+    background: #f5eaf3;
+    border-color: var(--color-primary);
+}
+
+/* Category feedback */
+#categories > [role="status"]:empty {
+    display: none;
+}
+
+#categories > [role="status"]:not(:empty) {
+    margin-bottom: 1.25rem;
+    padding: 0.85rem 1rem;
+    color: #53346b;
+    background-color: #f3e7fa;
+    border-left: 4px solid var(--color-secondary);
+    border-radius: 0.65rem;
+}
+
+/* Category list */
+#category-list ul {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#category-list li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 9rem 7rem;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+}
+
+#category-list li > span {
+    min-width: 0;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+#category-list button {
+    width: 100%;
+    padding: 0.55rem 0.85rem;
+    box-shadow: none;
+}
+
+#category-list button[data-action="edit"] {
+    color: var(--color-primary-dark);
+    background: #f5eaf3;
+    border: 1px solid var(--color-border);
+}
+
+#category-list button[data-action="edit"]:hover {
+    background: #eeddeb;
+    border-color: var(--color-primary);
+}
+
+/* Destructive action */
+#category-list button[data-action="delete"] {
+    color: #943647;
+    background: #fff5f6;
+    border: 1px solid #e4b8c0;
+}
+
+#category-list button[data-action="delete"]:hover {
+    color: #792738;
+    background: #fbe5e9;
+    border-color: #943647;
+}
+
+/* Disabled category controls */
+#categories button:disabled,
+#categories button:disabled:hover {
+    color: #65586c;
+    background: #e9e0eb;
+    border-color: var(--color-border);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Mobile category layout */
+@media (max-width: 600px) {
+    #categories form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 1rem;
+    }
+
+    #categories form button {
+        width: 100%;
+    }
+
+    #category-list li {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 0.85rem;
+    }
+
+    #category-list li > span {
+        grid-column: 1 / -1;
+    }
+}

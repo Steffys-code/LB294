@@ -5,9 +5,10 @@ export class AuthController {
     /**
      * Creates the authentication controller.
      */
-    constructor(authModel, authView) {
+    constructor(authModel, authView, onAuthenticated = () => {}) {
         this.authModel = authModel;
         this.authView = authView;
+        this.onAuthenticated = onAuthenticated;
         this.isBusy = false;
     }
 
@@ -54,6 +55,10 @@ export class AuthController {
             this.authView.setBusy(false);
             this.authView.setAuthenticated(this.authModel.isLoggedIn());
             this.authView.showFeedback(feedbackMessage);
+        }
+
+        if (this.authModel.isLoggedIn()) {
+            await this.onAuthenticated();
         }
     }
 
