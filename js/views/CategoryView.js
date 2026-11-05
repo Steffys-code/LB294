@@ -1,4 +1,4 @@
-fffffffffffff/**
+/**
  * Displays categories and manages category input.
  */
 export class CategoryView {

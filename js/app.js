@@ -5,6 +5,9 @@ import { AuthController } from './controllers/AuthController.js';
 import { CategoryModel } from './models/CategoryModel.js';
 import { CategoryView } from './views/CategoryView.js';
 import { CategoryController } from './controllers/CategoryController.js';
+import { ProductModel } from './models/ProductModel.js';
+import { ProductView } from './views/ProductView.js';
+import { ProductController } from './controllers/ProductController.js';
 
 /**
  * Creates and connects the application components.
@@ -21,13 +24,26 @@ function initializeApplication() {
 
     categoryController.initialize();
 
+    const productModel = new ProductModel(apiService);
+    const productView = new ProductView();
+    const productController = new ProductController(
+        productModel,
+        productView,
+        categoryModel
+    );
+
+    productController.initialize();
+
     const authModel = new AuthModel(apiService);
     const authView = new AuthView();
 
     const authController = new AuthController(
         authModel,
         authView,
-        () => categoryController.loadCategories()
+        async () => {
+            await categoryController.loadCategories();
+            await productController.loadProducts();
+        }
     );
 
     authController.initialize();
