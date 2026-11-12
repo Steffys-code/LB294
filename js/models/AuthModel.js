@@ -43,8 +43,6 @@ export class AuthModel {
 
     /**
      * Requests removal of the authentication cookie.
-     * @returns {Promise<void>} Resolves after successful logout.
-     * @throws {Error} If the logout request fails.
      */
     async logout() {
         await this.apiService.request(
@@ -57,7 +55,6 @@ export class AuthModel {
 
     /**
      * Returns the locally tracked authentication state.
-     * @returns {boolean} Whether authentication was successful locally.
      */
     isLoggedIn() {
         return this.isAuthenticated;

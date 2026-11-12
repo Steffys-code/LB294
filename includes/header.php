@@ -16,8 +16,8 @@
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
 
     <header class="site-header">
-        <div class="container header-content">
-            <a class="brand" href="index.php">Produktverwaltung</a>
+        <div class="container header-content">Shop API
+            <a class="brand" href="index.php"></a>
 
             <nav id="main-navigation" aria-label="Hauptnavigation" hidden>
                 <a href="#products">Produkte</a>

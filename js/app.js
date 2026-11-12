@@ -8,6 +8,7 @@ import { CategoryController } from './controllers/CategoryController.js';
 import { ProductModel } from './models/ProductModel.js';
 import { ProductView } from './views/ProductView.js';
 import { ProductController } from './controllers/ProductController.js';
+import { PermalinkController } from './controllers/PermalinkController.js';
 
 /**
  * Creates and connects the application components.
@@ -37,12 +38,20 @@ function initializeApplication() {
     const authModel = new AuthModel(apiService);
     const authView = new AuthView();
 
+    const permalinkController = new PermalinkController(
+        authModel,
+        productController,
+        categoryController,
+        authView
+    );
+
     const authController = new AuthController(
         authModel,
         authView,
         async () => {
             await categoryController.loadCategories();
             await productController.loadProducts();
+            await permalinkController.openCurrentRecord();
         }
     );
 

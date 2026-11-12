@@ -722,3 +722,107 @@ input:focus-visible {
         padding-inline: 0.5rem;
     }
 }
+
+/* Product permalink button */
+#product-list .permalink-button {
+    color: var(--color-primary-dark);
+    background: #f5eaf3;
+    border: 1px solid var(--color-border);
+}
+
+#product-list .permalink-button:hover {
+    background: #eeddeb;
+    border-color: var(--color-primary);
+}
+
+#product-list .permalink-button:disabled,
+#product-list .permalink-button:disabled:hover {
+    color: #65586c;
+    background: #e9e0eb;
+    border-color: var(--color-border);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Permalink dialog */
+.permalink-dialog {
+    width: min(560px, calc(100% - 2rem));
+    max-height: calc(100% - 2rem);
+    padding: 1.75rem;
+    overflow: auto;
+    color: var(--color-text);
+    font: inherit;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    box-shadow: 0 16px 48px rgb(57 44 70 / 20%);
+}
+
+.permalink-dialog::backdrop {
+    background: rgb(57 44 70 / 40%);
+}
+
+.permalink-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    color: var(--color-primary-dark);
+}
+
+.permalink-dialog > p {
+    color: var(--color-muted);
+}
+
+.permalink-dialog label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.permalink-dialog input {
+    width: 100%;
+    color: var(--color-text);
+    background: #fffafd;
+}
+
+.permalink-dialog .permalink-feedback {
+    margin-block: 0.75rem;
+    color: var(--color-primary-dark);
+}
+
+.permalink-feedback:empty {
+    display: none;
+}
+
+.permalink-dialog-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.permalink-dialog button[data-dialog-action="close"] {
+    color: var(--color-primary-dark);
+    background: #f5eaf3;
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+}
+
+.permalink-dialog button[data-dialog-action="close"]:hover {
+    background: #eeddeb;
+    border-color: var(--color-primary);
+}
+
+/* Mobile permalink dialog */
+@media (max-width: 600px) {
+    .permalink-dialog {
+        padding: 1.25rem;
+    }
+
+    .permalink-dialog-actions {
+        flex-direction: column;
+    }
+
+    .permalink-dialog-actions button {
+        width: 100%;
+    }
+}

@@ -96,7 +96,6 @@ export class AuthView {
 
     /**
      * Displays feedback without interpreting the message as HTML.
-     * @param {string} message The message displayed to the user.
      */
     showFeedback(message) {
         this.feedbackElement.textContent = message;

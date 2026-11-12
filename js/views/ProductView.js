@@ -1,9 +1,11 @@
+import { PermalinkController } from '../controllers/PermalinkController.js';
+
 /**
- * Displays products and manages product input.
+ * Displays products and manages product input and permalinks.
  */
 export class ProductView {
     /**
-     * Creates the product form and selects existing elements.
+     * Creates the product form, permalink dialog, and list references.
      */
     constructor() {
         this.createButton = document.getElementById(
@@ -131,6 +133,8 @@ export class ProductView {
         this.activeInput = this.form.elements.namedItem('active');
 
         this.listElement.before(this.feedbackElement, this.form);
+
+        this.createPermalinkDialog();
     }
 
     /**
@@ -237,6 +241,7 @@ export class ProductView {
             this.categoryInput.append(option);
         }
 
+        // Preserve the assigned category if its data could not be loaded.
         if (
             product &&
             !categories.some(
@@ -294,7 +299,7 @@ export class ProductView {
     }
 
     /**
-     * Displays products and their category names.
+     * Displays products and their category names..
      */
     render(products, categories) {
         this.listElement.replaceChildren();
@@ -375,7 +380,8 @@ export class ProductView {
 
             actions.append(
                 this.createActionButton('Bearbeiten', 'edit', product),
-                this.createActionButton('Löschen', 'delete', product)
+                this.createActionButton('Löschen', 'delete', product),
+                this.createPermalink(product)
             );
 
             item.append(content, actions);
@@ -401,6 +407,149 @@ export class ProductView {
                 : null;
         } catch {
             return null;
+        }
+    }
+
+    /**
+     * Creates the dialog for displaying and copying product permalinks.
+     */
+    createPermalinkDialog() {
+        this.permalinkDialog = document.createElement('dialog');
+        this.permalinkDialog.id = 'product-permalink-dialog';
+        this.permalinkDialog.className = 'permalink-dialog';
+
+        this.permalinkDialog.setAttribute(
+            'aria-labelledby',
+            'product-permalink-title'
+        );
+
+        this.permalinkDialog.innerHTML = `
+            <h2 id="product-permalink-title">Permalink zum Produkt</h2>
+
+            <p>
+                Kopiere diesen Link, um das Produkt später
+                direkt aufzurufen.
+            </p>
+
+            <label for="product-permalink-url">Produktlink</label>
+
+            <input
+                id="product-permalink-url"
+                type="text"
+                readonly
+            >
+
+            <p
+                class="permalink-feedback"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="permalink-dialog-actions">
+                <button type="button" data-dialog-action="copy">
+                    Link kopieren
+                </button>
+
+                <button type="button" data-dialog-action="close">
+                    Schliessen
+                </button>
+            </div>
+        `;
+
+        this.permalinkInput = this.permalinkDialog.querySelector(
+            '#product-permalink-url'
+        );
+
+        this.permalinkFeedback = this.permalinkDialog.querySelector(
+            '.permalink-feedback'
+        );
+
+        const copyButton = this.permalinkDialog.querySelector(
+            '[data-dialog-action="copy"]'
+        );
+
+        const closeButton = this.permalinkDialog.querySelector(
+            '[data-dialog-action="close"]'
+        );
+
+        copyButton.addEventListener('click', () => {
+            this.copyPermalink();
+        });
+
+        closeButton.addEventListener('click', () => {
+            this.permalinkDialog.close();
+        });
+
+        // Select the full URL when the user clicks the input.
+        this.permalinkInput.addEventListener('click', () => {
+            this.permalinkInput.select();
+        });
+
+        document.body.append(this.permalinkDialog);
+    }
+
+    /**
+     * Creates a button that opens the permalink dialog.
+     */
+    createPermalink(product) {
+        const button = document.createElement('button');
+
+        button.type = 'button';
+        button.textContent = 'Permalink';
+        button.className = 'permalink-button';
+        button.disabled = this.isBusy;
+
+        button.setAttribute('aria-haspopup', 'dialog');
+        button.setAttribute('aria-controls', 'product-permalink-dialog');
+
+        button.setAttribute(
+            'aria-label',
+            `${product.name}: Permalink anzeigen`
+        );
+
+        button.addEventListener('click', () => {
+            if (this.isBusy) {
+                return;
+            }
+
+            this.permalinkInput.value = PermalinkController.createUrl(
+                'product',
+                product.sku
+            );
+
+            this.permalinkFeedback.textContent = '';
+            this.permalinkDialog.showModal();
+
+            this.permalinkInput.focus();
+            this.permalinkInput.select();
+        });
+
+        return button;
+    }
+
+    /**
+     * Copies the displayed permalink or offers manual copying.
+     */
+    async copyPermalink() {
+        try {
+            if (!navigator.clipboard?.writeText) {
+                throw new Error('Clipboard access is unavailable.');
+            }
+
+            await navigator.clipboard.writeText(
+                this.permalinkInput.value
+            );
+
+            this.permalinkFeedback.textContent =
+                'Der Link wurde kopiert.';
+        } catch {
+            this.permalinkInput.focus();
+            this.permalinkInput.select();
+
+            this.permalinkFeedback.textContent =
+                'Automatisches Kopieren ist nicht möglich. ' +
+                'Kopiere den markierten Link mit Strg+C ' +
+                'oder auf dem Mac mit Cmd+C.';
         }
     }
 
@@ -452,7 +601,7 @@ export class ProductView {
     }
 
     /**
-     * Requests confirmation before deletion.
+     * Requests confirmation before deletion..
      */
     confirmDelete(name) {
         return window.confirm(
